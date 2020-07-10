@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <!-- link rel="stylesheet" href="base.css" -->
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: coral;">
+    <a class="navbar-brand" href="#">To Do App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Contact</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <style>
+    .header {
+      background-color: #111100;
+
+      padding: 30px 40px;
+      color: white;
+      text-align: center;
+    }
+
+    /* Clear floats after the header */
+    .header:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  </style>
+  <div id="myDIV" class="header">
+    <h2>My To Do List</h2>
+
+    <div class="form-group">
+      <label for="exampleInputEmail1">Title
+        <input type="text" class="form-control" id="title" aria-describedby="emailHelp" placeholder="Title">
+        <small class="form-text text-muted">Add an item to the list.</small>
+    </div>
+    <div class="form-group">
+      <label for="desc">Description</label>
+      <textarea class="form-control" id="desc" rows="3" placeholder="Item description..."></textarea>
+    </div>
+    <button id="add" type="submit" class="btn btn-primary">Add to list</button>
+    <button id="clr" type="submit" class="btn btn-primary">CLear list</button>
+
+  </div>
+
+  <div style="padding:10px;" id="items" class="my-4">
+    <h2>Your Items</h2>
+    <div class="row mt-4">
+      <div class="col">
+        <ul class="list-group list-group-flush" id="table">
+
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    update = ()=>{
+    str = ''
+    itemJsonArray = JSON.parse(localStorage.getItem('itemsJson'))
+    if (itemJsonArray!=null){
+    itemJsonArray.forEach((element, index) => {
+      str += `<li class="list-group-item"><div><b>${element[0]}</b></div><br>${element[1]}
+                <div class = "float-right">
+                    <button type="submit" onclick = "deleted(${index})" class="btn-sm btn-danger">-</button>                
+                </div>
+            </li>`;
+    });
+    }
+    document.getElementById("table").innerHTML = str;
+    }
+    update();
+
+    add = document.getElementById("add");
+    add.addEventListener("click", () => {
+      title = document.getElementById("title").value
+      desc = document.getElementById("desc").value
+      if (localStorage.getItem("itemsJson") == null) {
+        itemJsonArray = [];
+        itemJsonArray.push([title, desc]);
+        localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray))
+      }
+      else {
+        itemJsonArray = JSON.parse(localStorage.getItem('itemsJson'))
+        itemJsonArray.push([title, desc]);
+        localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray))
+      }
+      update();
+    })
+
+    function deleted(index){
+      itemJsonArray = JSON.parse(localStorage.getItem('itemsJson'))
+      itemJsonArray.splice(index, 1)
+      localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray))
+      update();
+    }
+
+    document.getElementById("clr").addEventListener("click", ()=>{
+      if(confirm("Are yuo sure want to clear the list?")){
+      localStorage.clear()
+      update()
+      }
+    })
+
+    // tablebody = document.getElementById("table").innerHTML
+    
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
